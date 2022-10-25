@@ -1,0 +1,60 @@
+name: flash_chat
+description: A new Flutter application.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons:
+  flutter_sequence_animation:
+  rubber:
+  sprung:
+  animated_text_kit:
+  cloud_firestore:
+  firebase_core:
+  firebase_auth:
+  flutter_icons:
+  google_sign_in:
+  flutter_facebook_login:
+    # git:
+    #   url: https://github.com/roughike/flutter_facebook_login
+    #   ref: e69fef3
+  http:
+  flutter_twitter:
+  flutter_auth_buttons:
+  modal_progress_hud:
+  provider:
+  firebase_storage:
+  image_picker:
+  path:
+  flutter_bloc:
+  equatable:
+  firebase_messaging:
+  flutter_local_notifications:
+  flutter_launcher_icons:
+  youtube_api:
+  youtube_player_flutter:
+  timeago:
+  time:
+  font_awesome_flutter:
+  meta:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/
+
+flutter_icons:
+  image_path: "images/logo.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true
