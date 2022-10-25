@@ -14,7 +14,7 @@ import 'package:flutter_twitter/flutter_twitter.dart';
 import 'dart:developer' as logger;
 import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:auth_buttons/auth_buttons.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'wellcome_screen';
@@ -22,7 +22,8 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin{
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
   bool isLoggedInGoogle = false;
   bool isLoggedInFacebook = false;
   bool isLoggedInTwitter = false;
@@ -35,9 +36,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount _currentUser;
 
-  Future<FirebaseUser> initiateGoogleLogin(BuildContext context) async {
-    // Scaffold.of(context).showSnackBar(),
-  }
+  // Future<FirebaseUser> initiateGoogleLogin(BuildContext context) async {
+  //   // Scaffold.of(context).showSnackBar(),
+  // }
 
   void _signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -69,12 +70,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     });
   }
 
-  void _signInWithFacebook() async {  // 影片教學 https://www.youtube.com/watch?v=bD-BdZ376_c
+  void _signInWithFacebook() async {
+    // 影片教學 https://www.youtube.com/watch?v=bD-BdZ376_c
     var facebookLogin = FacebookLogin();
     var result = await facebookLogin.logIn(['email']);
     bool isLoggedIn = result == FacebookLoginStatus.loggedIn;
     print('$isLoggedIn');
-    switch(result.status) {
+    switch (result.status) {
       case FacebookLoginStatus.error:
         setState(() => isLoggedIn = false);
         print('FacebookLoginStatus.error');
@@ -86,7 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
         final graphResponse = await http.get(
-                    'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
         final profile = JSON.jsonDecode(graphResponse.body);
         AuthCredential credential =
             FacebookAuthProvider.getCredential(accessToken: token);
@@ -118,11 +120,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
           authTokenSecret: result.session.secret,
         );
 
-        FirebaseAuth.instance.signInWithCredential(credential).then((signedInUser) {
+        FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((signedInUser) {
           Navigator.pushNamed(context, ChatScreen.id);
           // Navigator.of(context).pushReplacementNamed('/login_screen');
         }).catchError((e) {
-            print(e);
+          print(e);
         });
         break;
       case TwitterLoginStatus.cancelledByUser:
@@ -134,7 +138,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     }
   }
 
-    // Example code of how to sign in anonymously.
+  // Example code of how to sign in anonymously.
   void _signInAnonymously() async {
     final FirebaseUser user = (await _firebaseAuth.signInAnonymously()).user;
     assert(user != null);
@@ -184,7 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     controller.forward();
     // controller.reverse(from: 1.0);
 
-    animation.addStatusListener((status){
+    animation.addStatusListener((status) {
       // print(status); // 顯示AnimationStatus的狀態是 dismissed 或 forward 或 completed
       if (status == AnimationStatus.completed) {
         controller.reverse(from: 1.0);
@@ -207,7 +211,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(            // 顏色透明Colors.red.withOpacity(0~1的數值))
+    return Scaffold(
+      // 顏色透明Colors.red.withOpacity(0~1的數值))
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -217,7 +222,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
           children: <Widget>[
             Row(
               children: <Widget>[
-                Flexible(         // 自動調整大小以免畫面超出螢幕
+                Flexible(
+                  // 自動調整大小以免畫面超出螢幕
                   child: Hero(
                     tag: 'logo',
                     child: Container(
@@ -227,7 +233,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   ),
                 ),
                 TypewriterAnimatedTextKit(
-                  text :['Flash Chat 聊天室 ${(animation.value * 100).toInt()}%'],
+                  text: ['Flash Chat 聊天室 ${(animation.value * 100).toInt()}%'],
                   textStyle: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w900,
@@ -245,44 +251,47 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               onPressed: () => _signInAnonymously(),
             ),
             // 使用Google登入
-            GoogleSignInButton(
+            GoogleAuthButton(
               onPressed: () => _signInWithGoogle(),
-              borderRadius: 30.0,
               darkMode: true,
             ),
             // 使用Google登入
-            isLoggedInFacebook ?
-            Column(
-              children: <Widget>[
-                Image.network(userProfile["picture"]["data"]["url"], height: 50.0, width: 50.0,),
-    Text(userProfile["name"]),
-                OutlineButton( 
-                  child: Text("Logout"), 
-                  onPressed: (){
-                    setState(() {
-                      isLoggedInFacebook = false;
-                    });
-                  },
-                )              
-              ],
-            )
-            : FacebookSignInButton(
-              onPressed: () => _signInWithFacebook(),
-              borderRadius: 30.0,
-            ),
+            isLoggedInFacebook
+                ? Column(
+                    children: <Widget>[
+                      Image.network(
+                        userProfile["picture"]["data"]["url"],
+                        height: 50.0,
+                        width: 50.0,
+                      ),
+                      Text(userProfile["name"]),
+                      OutlinedButton(
+                        child: Text("Logout"),
+                        onPressed: () {
+                          setState(() {
+                            isLoggedInFacebook = false;
+                          });
+                        },
+                      )
+                    ],
+                  )
+                : FacebookAuthButton(
+                    onPressed: () => _signInWithFacebook(),
+                  ),
             // 使用Twitter登入
-            TwitterSignInButton(
-              borderRadius: 30.0,
+            TwitterAuthButton(
               onPressed: () => _signInWithTwitter(),
             ),
-            RoundedButton(    // 這個函式有整理在 conponents/rounded_button.dart
+            RoundedButton(
+              // 這個函式有整理在 conponents/rounded_button.dart
               title: "其他登入",
               color: Colors.lightBlueAccent,
               onPressed: () {
                 Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
-            RoundedButton(    // 這個函式有整理在 conponents/rounded_button.dart
+            RoundedButton(
+              // 這個函式有整理在 conponents/rounded_button.dart
               title: "註冊帳號",
               color: Colors.blueAccent,
               onPressed: () {
