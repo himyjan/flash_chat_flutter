@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:name="${applicationName}"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
