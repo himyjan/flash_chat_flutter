@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'dart:io';
 import 'package:time/time.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final _firestore =
     FirebaseFirestore.instance; // 移出來外面讓其他Class可以取用(使用在MessageStream)
@@ -135,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Ionicons.ios_log_out),
+              icon: Icon(FontAwesomeIcons.rightFromBracket),
               onPressed: () {
                 //Implement logout functionality
                 _auth.signOut(); // 登出帳戶
