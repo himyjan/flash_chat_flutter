@@ -27,12 +27,10 @@ Future<FirebaseMessaging> configureMessaging() async {
     print('User declined or has not accepted permission');
   }
 
-  messaging.configure(onMessage: (Map<String?, dynamic> message) async {
-    print('on Message: ${message}');
-  }, onLaunch: (Map<String?, dynamic> message) async {
-    print('on Launch:');
-  }, onResume: (Map<String?, dynamic> message) async {
-    print('on Resume:');
+  FirebaseMessaging.onMessage.listen((event) {
+    (Map<String, dynamic> message) async {
+      print('on Launch:');
+    };
   });
   return messaging;
 }

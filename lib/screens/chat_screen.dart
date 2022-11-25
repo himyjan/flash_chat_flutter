@@ -217,12 +217,12 @@ class MessageStream extends StatelessWidget {
         if (snapshot.hasData) {
           // 如果snapshot中有資料更新訊息
           final messages =
-              snapshot.data.documents.reversed; // 讀取時將訊息翻轉(主要是為了自動向下捲到新訊息)
+              snapshot.data!.docs.reversed; // 讀取時將訊息翻轉(主要是為了自動向下捲到新訊息)
           List<MessageBubble> messageWidgets = [];
           for (var message in messages) {
-            final messageText = message.data['text'];
-            final messageSender = message.data['sender'];
-            final currentTime = message.data['time'];
+            final messageText = message['text'];
+            final messageSender = message['sender'];
+            final currentTime = message['time'];
 
             final currentUser = loggedInUser?.displayName != null
                 ? loggedInUser?.displayName
@@ -259,6 +259,7 @@ class MessageStream extends StatelessWidget {
             ),
           );
         }
+        return SizedBox.shrink();
       },
     );
   }
@@ -355,12 +356,12 @@ NotificationDetails get _noSound {
   final androidChannelSpecifics = AndroidNotificationDetails(
     'silent channel id',
     'silent channel name',
-    'silent channel description',
+    channelDescription: 'silent channel description',
     playSound: false,
   );
-  final iOSChannelSpecifics = IOSNotificationDetails(presentSound: false);
-
-  return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
+  final iOSChannelSpecifics = DarwinNotificationDetails(presentSound: false);
+  return NotificationDetails(
+      android: androidChannelSpecifics, iOS: iOSChannelSpecifics);
 }
 
 Future showSilentNotification(
@@ -376,14 +377,15 @@ NotificationDetails get _ongoing {
   final androidChannelSpecifics = AndroidNotificationDetails(
     'your channel id',
     'your channel name',
-    'your channel description',
+    channelDescription: 'your channel description',
     importance: Importance.max,
     priority: Priority.high,
     ongoing: true,
     autoCancel: false,
   );
-  final iOSChannelSpecifics = IOSNotificationDetails();
-  return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
+  final iOSChannelSpecifics = DarwinNotificationDetails();
+  return NotificationDetails(
+      android: androidChannelSpecifics, iOS: iOSChannelSpecifics);
 }
 
 class SecondScreen extends StatefulWidget {
