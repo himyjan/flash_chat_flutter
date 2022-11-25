@@ -42,7 +42,6 @@ dependencies:
   timeago:
   time:
   font_awesome_flutter:
-  meta:
 
 dev_dependencies:
   flutter_test:
