@@ -44,7 +44,7 @@ StreamBuilder<QuerySnapshot> getComments(String? movieId) {
 }
 
 void createRecord(String? movieId, String? email, String? content) async {
-  await FirebaseFirestore.instance.collection("comments").document().setData({
+  await FirebaseFirestore.instance.collection("comments").doc().set({
     'movie_id': movieId,
     'user_email': email,
     'content': content,
@@ -53,22 +53,23 @@ void createRecord(String? movieId, String? email, String? content) async {
 }
 
 Future<String?> getProfilePictureUrl(String? email) async {
-  var doc = await FirebaseFirestore.instance.collection('Users').document(email).get();
+  var doc =
+      await FirebaseFirestore.instance.collection('Users').doc(email).get();
   if (doc.exists) {
-    return doc.data['profile_picture_url'];
+    return doc['profile_picture_url'];
   }
   return '';
 }
 
 void updateProfilePictureUrl(String? email, String? url) async {
   print(url);
-  await FirebaseFirestore.instance.collection("Users").document(email).setData({
+  await FirebaseFirestore.instance.collection("Users").doc(email).set({
     'profile_picture_url': url,
-  }, merge: true);
+  }, SetOptions(merge: true));
 }
 
 void updateUserToken(String? email, String? token) async {
-  await FirebaseFirestore.instance.collection("Users").document(email).setData({
+  await FirebaseFirestore.instance.collection("Users").doc(email).set({
     'fcm_token': token,
-  }, merge: true);
+  }, SetOptions(merge: true));
 }

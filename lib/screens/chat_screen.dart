@@ -57,22 +57,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<String?> getProfilePictureUrl(String? email) async {
     // 用使用者信箱當作索引值去找到對應的文件
-    var doc = await FirebaseFirestore.instance
-        .collection('Users')
-        .document(email)
-        .get();
+    var doc =
+        await FirebaseFirestore.instance.collection('Users').doc(email).get();
     if (doc.exists) {
-      return doc.data['profile_picture_url'];
+      return doc['profile_picture_url'];
     }
     return '';
   }
 
   void updateProfilePictureUrl(String? email, String? url) async {
     // 用使用者信箱當作索引值去新增or更新 圖片路徑
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .document(email)
-        .setData({
+    await FirebaseFirestore.instance.collection("Users").doc(email).set({
       'profile_picture_url': url,
     });
   }
@@ -127,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void messagesStream() async {
     // 這個方法會在資料庫增加新資料時自動取得最新資料
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.documents) {
+      for (var message in snapshot.docs) {
         print(message.data);
       }
     }
