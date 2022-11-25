@@ -17,7 +17,7 @@ import 'dart:io' show Platform;
 import 'package:auth_buttons/auth_buttons.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  static const String id = 'wellcome_screen';
+  static const String? id = 'wellcome_screen';
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -27,41 +27,41 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   bool isLoggedInGoogle = false;
   bool isLoggedInFacebook = false;
   bool isLoggedInTwitter = false;
-  Map userProfile;
+  late Map userProfile;
 
-  AnimationController controller;
-  Animation animation;
+  late AnimationController controller;
+  late Animation animation;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  GoogleSignInAccount _currentUser;
+  late GoogleSignInAccount _currentUser;
 
-  // Future<FirebaseUser> initiateGoogleLogin(BuildContext context) async {
+  // Future<User> initiateGoogleLogin(BuildContext context) async {
   //   // Scaffold.of(context).showSnackBar(),
   // }
 
   void _signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
     );
-    final FirebaseUser user =
+    final User? user =
         (await _firebaseAuth.signInWithCredential(credential)).user;
-    assert(user.email != null);
-    assert(user.displayName != null);
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+    assert(user?.email != null);
+    assert(user?.displayName != null);
+    assert(!user!.isAnonymous);
+    assert(await user?.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
-    assert(user.uid == currentUser.uid);
+    final User? currentUser = await _firebaseAuth.currentUser!;
+    assert(user?.uid == currentUser?.uid);
     setState(() {
       if (user != null) {
         isLoggedInGoogle = true;
         print('登入Google帳號成功');
-        Navigator.pushNamed(context, ChatScreen.id);
+        Navigator.pushNamed(context, ChatScreen.id!);
         // _userID = user.uid;
         print(user.uid);
       } else {
@@ -87,18 +87,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         break;
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
-        final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+        final graphResponse = await http.get(Uri.parse(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}'));
         final profile = JSON.jsonDecode(graphResponse.body);
-        AuthCredential credential =
-            FacebookAuthProvider.getCredential(accessToken: token);
+        AuthCredential credential = FacebookAuthProvider.credential(token);
         var user = await FirebaseAuth.instance.signInWithCredential(credential);
         setState(() {
           userProfile = profile;
           isLoggedIn = true;
         });
         print('登入Facebook帳號成功');
-        Navigator.pushNamed(context, ChatScreen.id);
+        Navigator.pushNamed(context, ChatScreen.id!);
         break;
     }
   }
@@ -115,15 +114,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       case TwitterLoginStatus.loggedIn:
         var session = result.session;
         // _sendTokenAndSecretToServer(session.token, session.secret);
-        AuthCredential credential = TwitterAuthProvider.getCredential(
-          authToken: result.session.token,
-          authTokenSecret: result.session.secret,
+        AuthCredential credential = TwitterAuthProvider.credential(
+          accessToken: result.session.token,
+          secret: result.session.secret,
         );
 
         FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((signedInUser) {
-          Navigator.pushNamed(context, ChatScreen.id);
+          Navigator.pushNamed(context, ChatScreen.id!);
           // Navigator.of(context).pushReplacementNamed('/login_screen');
         }).catchError((e) {
           print(e);
@@ -140,32 +139,32 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   // Example code of how to sign in anonymously.
   void _signInAnonymously() async {
-    final FirebaseUser user = (await _firebaseAuth.signInAnonymously()).user;
+    final User? user = (await _firebaseAuth.signInAnonymously()).user;
     assert(user != null);
-    assert(user.isAnonymous);
-    assert(!user.isEmailVerified);
-    assert(await user.getIdToken() != null);
+    assert(user!.isAnonymous);
+    assert(!user!.emailVerified);
+    assert(await user!.getIdToken() != null);
     if (Platform.isIOS) {
       // Anonymous auth doesn't show up as a provider on iOS
-      assert(user.providerData.isEmpty);
+      assert(user!.providerData.isEmpty);
     } else if (Platform.isAndroid) {
       // Anonymous auth does show up as a provider on Android
-      assert(user.providerData.length == 1);
-      assert(user.providerData[0].providerId == 'firebase');
-      assert(user.providerData[0].uid != null);
-      assert(user.providerData[0].displayName == null);
-      assert(user.providerData[0].photoUrl == null);
-      assert(user.providerData[0].email == null);
+      assert(user!.providerData.length == 1);
+      assert(user!.providerData[0].providerId == 'firebase');
+      assert(user!.providerData[0].uid != null);
+      assert(user!.providerData[0].displayName == null);
+      assert(user!.providerData[0].photoURL == null);
+      assert(user!.providerData[0].email == null);
     }
 
-    final FirebaseUser currentUser = await _firebaseAuth.currentUser();
-    assert(user.uid == currentUser.uid);
+    final User currentUser = await _firebaseAuth.currentUser!;
+    assert(user!.uid == currentUser.uid);
     setState(() {
       if (user != null) {
         // _success = true;
         // _userID = user.uid;
         print('匿名登入成功');
-        Navigator.pushNamed(context, ChatScreen.id);
+        Navigator.pushNamed(context, ChatScreen.id!);
       } else {
         // _success = false;
         print('匿名登入失敗');
@@ -232,12 +231,21 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     ),
                   ),
                 ),
-                TypewriterAnimatedTextKit(
-                  text: ['Flash Chat 聊天室 ${(animation.value * 100).toInt()}%'],
-                  textStyle: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w900,
-                  ),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Flash Chat 聊天室 ${(animation.value * 100).toInt()}%',
+                      textStyle: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      speed: const Duration(milliseconds: 2000),
+                    ),
+                  ],
+                  totalRepeatCount: 4,
+                  pause: const Duration(milliseconds: 1000),
+                  displayFullTextOnTap: true,
+                  stopPauseOnTap: true,
                 ),
               ],
             ),
@@ -253,7 +261,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             // 使用Google登入
             GoogleAuthButton(
               onPressed: () => _signInWithGoogle(),
-              darkMode: true,
+              themeMode: ThemeMode.dark,
             ),
             // 使用Google登入
             isLoggedInFacebook
@@ -287,7 +295,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: "其他登入",
               color: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.pushNamed(context, LoginScreen.id!);
               },
             ),
             RoundedButton(
@@ -296,7 +304,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               color: Colors.blueAccent,
               onPressed: () {
                 //Go to registration screen.
-                Navigator.pushNamed(context, RegistrationScreen.id);
+                Navigator.pushNamed(context, RegistrationScreen.id!);
               },
             ),
             Container(

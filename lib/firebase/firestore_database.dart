@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/comment_widget.dart';
 
-StreamBuilder<QuerySnapshot> getComments(String movieId) {
+StreamBuilder<QuerySnapshot> getComments(String? movieId) {
   return StreamBuilder<QuerySnapshot>(
     stream: Firestore.instance
         .collection('comments')
@@ -44,7 +44,7 @@ StreamBuilder<QuerySnapshot> getComments(String movieId) {
   );
 }
 
-void createRecord(String movieId, String email, String content) async {
+void createRecord(String? movieId, String? email, String? content) async {
   await Firestore.instance.collection("comments").document().setData({
     'movie_id': movieId,
     'user_email': email,
@@ -53,7 +53,7 @@ void createRecord(String movieId, String email, String content) async {
   });
 }
 
-Future<String> getProfilePictureUrl(String email) async {
+Future<String?> getProfilePictureUrl(String? email) async {
   var doc = await Firestore.instance.collection('Users').document(email).get();
   if (doc.exists) {
     return doc.data['profile_picture_url'];
@@ -61,14 +61,14 @@ Future<String> getProfilePictureUrl(String email) async {
   return '';
 }
 
-void updateProfilePictureUrl(String email, String url) async {
+void updateProfilePictureUrl(String? email, String? url) async {
   print(url);
   await Firestore.instance.collection("Users").document(email).setData({
     'profile_picture_url': url,
   }, merge: true);
 }
 
-void updateUserToken(String email, String token) async {
+void updateUserToken(String? email, String? token) async {
   await Firestore.instance.collection("Users").document(email).setData({
     'fcm_token': token,
   }, merge: true);

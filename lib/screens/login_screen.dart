@@ -6,33 +6,32 @@ import 'chat_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String id = 'login_screen';
+  static const String? id = 'login_screen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _firebaseAuth = FirebaseAuth.instance;
-  String email;
-  String password;
+  String? email;
+  String? password;
   bool showLoading = false;
 
-  
   // bool isLoggedInGithub = false;
   // bool isLoggedInTwitter = false;
 
   // void _signInWithGithub() async {
-  //   final AuthCredential credential = GithubAuthProvider.getCredential(
+  //   final AuthCredential credential = GithubAuthProvider.credential(
   //     token: _tokenController.text,
   //   );
-  //   final FirebaseUser user =
+  //   final User user =
   //       (await _firebaseAuth.signInWithCredential(credential)).user;
   //   assert(user.email != null);
   //   assert(user.displayName != null);
   //   assert(!user.isAnonymous);
   //   assert(await user.getIdToken() != null);
 
-  //   final FirebaseUser currentUser = await _firebaseAuth.currentUser();
+  //   final User currentUser = await _firebaseAuth.currentUser!;
   //   assert(user.uid == currentUser.uid);
   //   setState(() {
   //     if (user != null) {
@@ -63,7 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Flexible(         // 自動調整大小以免畫面超出螢幕
+              Flexible(
+                // 自動調整大小以免畫面超出螢幕
                 child: Hero(
                   tag: 'logo',
                   child: Container(
@@ -83,20 +83,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   //Do something with the user input.
                   email = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: '請輸入登入信箱'), // 方法寫在 constants.dart中 並使用copywith更改預設屬性
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText:
+                        '請輸入登入信箱'), // 方法寫在 constants.dart中 並使用copywith更改預設屬性
               ),
               SizedBox(
                 height: 8.0,
               ),
               TextField(
                 controller: _tokenSecretController,
-                obscureText: true,         // 隱藏輸入的密碼
+                obscureText: true, // 隱藏輸入的密碼
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   //Do something with the user input.
                   password = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(hintText: '請輸入登入密碼'), // 方法寫在 constants.dart中 並使用copywith更改預設屬性
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText:
+                        '請輸入登入密碼'), // 方法寫在 constants.dart中 並使用copywith更改預設屬性
               ),
               SizedBox(
                 height: 24.0,
@@ -112,12 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     showLoading = true; // 透過改變bool變數控制載入畫面
                   });
                   try {
-                    final newUser = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+                    final newUser =
+                        await _firebaseAuth.signInWithEmailAndPassword(
+                            email: email!, password: password!);
                     if (newUser != null) {
-                      Navigator.pushNamed(context, ChatScreen.id);
+                      Navigator.pushNamed(context, ChatScreen.id!);
                     }
-                  }
-                  catch (e) {
+                  } catch (e) {
                     print(e);
                   }
                   setState(() {

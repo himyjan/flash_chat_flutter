@@ -11,12 +11,11 @@ FirebaseMessaging configureMessaging() {
     print("Settings registered: ${settings}");
   });
 
-  firebaseMessaging.configure(
-  onMessage: (Map<String, dynamic> message) async {
+  firebaseMessaging.configure(onMessage: (Map<String?, dynamic> message) async {
     print('on Message: ${message}');
-  }, onLaunch: (Map<String, dynamic> message) async {
+  }, onLaunch: (Map<String?, dynamic> message) async {
     print('on Launch:');
-  }, onResume: (Map<String, dynamic> message) async {
+  }, onResume: (Map<String?, dynamic> message) async {
     print('on Resume:');
   });
   return firebaseMessaging;

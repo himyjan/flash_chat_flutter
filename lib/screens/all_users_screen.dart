@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AllUsersScreen extends StatefulWidget {
-  static const String id = 'all_users_screen';
+  static const String? id = 'all_users_screen';
 
   _AllUsersScreenState createState() => _AllUsersScreenState();
 }
@@ -17,10 +17,10 @@ class AllUsersScreen extends StatefulWidget {
 class _AllUsersScreenState extends State<AllUsersScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  StreamSubscription<QuerySnapshot> _subscription;
-  List<DocumentSnapshot> usersList;
+  late StreamSubscription<QuerySnapshot> _subscription;
+  late List<DocumentSnapshot> usersList;
   final CollectionReference _collectionReference =
-      Firestore.instance.collection("users");
+      FirebaseFirestore.instance.collection("users");
 
   @override
   void initState() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../firebase/firestore_database.dart';
 
-Widget commentWidget(String email, String content, var time) {
+Widget commentWidget(String? email, String? content, var time) {
   return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -17,7 +17,7 @@ Widget commentWidget(String email, String content, var time) {
           Container(
             height: 40,
             width: 40,
-            child: FutureBuilder<String>(
+            child: FutureBuilder<String?>(
               future: getProfilePictureUrl(email),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
@@ -25,19 +25,17 @@ Widget commentWidget(String email, String content, var time) {
                   case ConnectionState.active:
                   case ConnectionState.waiting:
                     return Center(child: CircularProgressIndicator());
-                    break;
                   case ConnectionState.done:
-                    if (snapshot.data.isEmpty)
+                    if (snapshot.data!.isEmpty)
                       return Image.asset(
                         'assets/no.jpg',
                         fit: BoxFit.fill,
                       );
                     return Image.network(
-                      snapshot.data,
+                      snapshot.data.toString(),
                       fit: BoxFit.fill,
                     );
                 }
-                return null;
               },
             ),
           ),
@@ -52,7 +50,7 @@ Widget commentWidget(String email, String content, var time) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    email,
+                    email!,
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.lightBlueAccent,
@@ -77,7 +75,7 @@ Widget commentWidget(String email, String content, var time) {
                 constraints: BoxConstraints(maxWidth: 300, maxHeight: 1000),
                 child: Container(
                   child: Text(
-                    content,
+                    content!,
                     style: TextStyle(
                       fontSize: 14,
                     ),

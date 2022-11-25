@@ -7,23 +7,23 @@ import 'package:flash_chat/screens/all_users_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flash_chat/firebase/user_repository.dart';
 
-
-void main() => runApp(FlashChat());
+void main() {
+  runApp(FlashChat());
+}
 
 class FlashChat extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,  // 取消顯示右上角debug標籤
+      debugShowCheckedModeBanner: false, // 取消顯示右上角debug標籤
       home: WelcomeScreen(),
       initialRoute: WelcomeScreen.id,
       routes: {
-        WelcomeScreen.id : (context) => WelcomeScreen(),
-        LoginScreen.id : (context) => LoginScreen(),
-        RegistrationScreen.id : (context) => RegistrationScreen(),
-        AllUsersScreen.id : (context) => AllUsersScreen(),
-        ChatScreen.id : (context) => ChatScreen(),
+        WelcomeScreen.id!: (context) => WelcomeScreen(),
+        LoginScreen.id!: (context) => LoginScreen(),
+        RegistrationScreen.id!: (context) => RegistrationScreen(),
+        AllUsersScreen.id!: (context) => AllUsersScreen(),
+        ChatScreen.id!: (context) => ChatScreen(),
       },
     );
   }
