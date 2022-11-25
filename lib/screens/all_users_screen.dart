@@ -27,7 +27,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
     super.initState();
     _subscription = _collectionReference.snapshots().listen((datasnapshot) {
       setState(() {
-        usersList = datasnapshot.documents;
+        usersList = datasnapshot.docs;
         print("Users List ${usersList.length}");
       });
     });
@@ -67,14 +67,14 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundImage:
-                            NetworkImage(usersList[index].data['photoUrl']),
+                            NetworkImage(usersList[index]['photoUrl']),
                       ),
-                      title: Text(usersList[index].data['name'],
+                      title: Text(usersList[index]['name'],
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           )),
-                      subtitle: Text(usersList[index].data['emailId'],
+                      subtitle: Text(usersList[index]['emailId'],
                           style: TextStyle(
                             color: Colors.grey,
                           )),
@@ -83,10 +83,9 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => ChatScreen(
-                                    name: usersList[index].data['name'],
-                                    photoUrl: usersList[index].data['photoUrl'],
-                                    receiverUid:
-                                        usersList[index].data['uid'])));
+                                    name: usersList[index]['name'],
+                                    photoUrl: usersList[index]['photoUrl'],
+                                    receiverUid: usersList[index]['uid'])));
                       }),
                     );
                   }),

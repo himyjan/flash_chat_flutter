@@ -46,8 +46,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // Future upLoadImage(File _image, String? email) async {
   //   String? fileName = p.extension(_image.path),
-  //   StorageReference firebaseStorageRef = FirebaseStorage().ref().child(fileName);
-  //   StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+  //   Reference firebaseStorageRef = FirebaseStorage().ref().child(fileName);
+  //   UploadTask uploadTask = firebaseStorageRef.putFile(_image);
   //   StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
   //   setState(() {
   //     print('Profile Picture uploaded');

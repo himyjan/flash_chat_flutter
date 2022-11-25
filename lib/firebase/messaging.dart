@@ -1,22 +1,38 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-FirebaseMessaging configureMessaging() {
-  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+Future<FirebaseMessaging> configureMessaging() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  // only fire on iOS
-  firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true));
-  firebaseMessaging.onIosSettingsRegistered
-      .listen((IosNotificationSettings settings) {
-    print("Settings registered: ${settings}");
-  });
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 
-  firebaseMessaging.configure(onMessage: (Map<String?, dynamic> message) async {
+  await messaging.setForegroundNotificationPresentationOptions(
+    alert: true, // Required to display a heads up notification
+    badge: true,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+
+  messaging.configure(onMessage: (Map<String?, dynamic> message) async {
     print('on Message: ${message}');
   }, onLaunch: (Map<String?, dynamic> message) async {
     print('on Launch:');
   }, onResume: (Map<String?, dynamic> message) async {
     print('on Resume:');
   });
-  return firebaseMessaging;
+  return messaging;
 }
