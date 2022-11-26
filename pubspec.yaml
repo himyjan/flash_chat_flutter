@@ -38,6 +38,13 @@ dependencies:
   timeago:
   time:
   font_awesome_flutter:
+  firebase_ui_auth:
+  firebase_ui_localizations:
+  firebase_ui_oauth_apple:
+  firebase_ui_oauth_facebook:
+  firebase_ui_oauth_google:
+  firebase_ui_oauth_twitter:
+  flutter_localizations:
 
 dev_dependencies:
   flutter_test:
