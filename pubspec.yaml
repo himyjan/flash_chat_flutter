@@ -44,7 +44,6 @@ dependencies:
   firebase_ui_oauth_facebook:
   firebase_ui_oauth_google:
   firebase_ui_oauth_twitter:
-  flutter_localizations:
 
 dev_dependencies:
   flutter_test:
