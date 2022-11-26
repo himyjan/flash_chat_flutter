@@ -14,6 +14,7 @@ dependencies:
   cupertino_icons:
   flutter_riverpod:
   riverpod_annotation:
+  go_router:
   flutter_sequence_animation:
   rubber:
   sprung:
