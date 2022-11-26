@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 import 'dart:developer' as logger;
-import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
 import 'package:auth_buttons/auth_buttons.dart';
 
