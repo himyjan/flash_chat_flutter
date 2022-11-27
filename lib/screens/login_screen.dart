@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/conponents/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //       // _message = 'Successfully signed in with Github. ' + user.uid;
   //       isLoggedInGithub = true;
   //       print('登入Github帳號成功');
-  //       Navigator.pushNamed(context, ChatScreen.id);
+  //       context.go('/ChatScreen');
   //     } else {
   //       // _message = 'Failed to sign in with Github. ';
   //       isLoggedInGithub = false;
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         await _firebaseAuth.signInWithEmailAndPassword(
                             email: email!, password: password!);
                     if (newUser != null) {
-                      Navigator.pushNamed(context, ChatScreen.id!);
+                      context.go('/ChatScreen');
                     }
                   } catch (e) {
                     print(e);

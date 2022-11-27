@@ -15,10 +15,12 @@ class RoundedButton extends StatelessWidget {
         elevation: 5.0,
         color: color,
         borderRadius: BorderRadius.circular(30.0),
-        child: MaterialButton(
-          onPressed: () => onPressed,
-          minWidth: 200.0,
-          height: 42.0,
+        child: ElevatedButton(
+          onPressed: () => onPressed!(),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              minimumSize: Size(200, 42)),
           child: Text(
             //'登入',
             title!,

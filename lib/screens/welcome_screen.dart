@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'chat_screen.dart';
@@ -58,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (user != null) {
         isLoggedInGoogle = true;
         print('登入Google帳號成功');
-        Navigator.pushNamed(context, ChatScreen.id!);
+        context.go('/ChatScreen');
         // _userID = user.uid;
         print(user.uid);
       } else {
@@ -94,7 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   //         isLoggedIn = true;
   //       });
   //       print('登入Facebook帳號成功');
-  //       Navigator.pushNamed(context, ChatScreen.id!);
+  //       context.go('/ChatScreen');
   //       break;
   //   }
   // }
@@ -119,7 +120,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   //       FirebaseAuth.instance
   //           .signInWithCredential(credential)
   //           .then((signedInUser) {
-  //         Navigator.pushNamed(context, ChatScreen.id!);
+  //         context.go('/ChatScreen');
   //         // Navigator.of(context).pushReplacementNamed('/login_screen');
   //       }).catchError((e) {
   //         print(e);
@@ -161,7 +162,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         // _success = true;
         // _userID = user.uid;
         print('匿名登入成功');
-        Navigator.pushNamed(context, ChatScreen.id!);
+        context.go('/ChatScreen');
       } else {
         // _success = false;
         print('匿名登入失敗');
@@ -292,7 +293,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: "其他登入",
               color: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id!);
+                return context.go('/LoginScreen');
               },
             ),
             RoundedButton(
@@ -301,7 +302,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               color: Colors.blueAccent,
               onPressed: () {
                 //Go to registration screen.
-                Navigator.pushNamed(context, RegistrationScreen.id!);
+                return context.go('/RegistrationScreen');
               },
             ),
             Container(

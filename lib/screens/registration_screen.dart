@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/conponents/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:go_router/go_router.dart';
 import 'chat_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -77,7 +78,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   final newUser = await _auth.createUserWithEmailAndPassword(
                       email: email!, password: password!);
                   if (newUser != null) {
-                    Navigator.pushNamed(context, ChatScreen.id!);
+                    context.go('/ChatScreen');
                   }
                 } catch (e) {
                   print(e);
