@@ -14,7 +14,7 @@ import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
 import 'package:firebase_ui_oauth_facebook/firebase_ui_oauth_facebook.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import 'package:firebase_ui_oauth_twitter/firebase_ui_oauth_twitter.dart';
+// import 'package:firebase_ui_oauth_twitter/firebase_ui_oauth_twitter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flash_chat/firebase/user_repository.dart';
 
@@ -47,12 +47,12 @@ void main() async {
         clientId: '772812439873865',
         redirectUri:
             'https://flutter-flash-chat-a4db3.firebaseapp.com/__/auth/handler'),
-    TwitterProvider(
-      apiKey: 'RXJ6YY8Sd1Y1Qu2Y6LTJNDjX8',
-      apiSecretKey: 'ABrRtbeSNqXQeGM6gQIY0uUNo5E9kKMOi1PTKh9hiWiKkLOex6',
-      redirectUri:
-          'https://flutter-flash-chat-a4db3.firebaseapp.com/__/auth/handler',
-    ),
+    // TwitterProvider(
+    //   apiKey: 'RXJ6YY8Sd1Y1Qu2Y6LTJNDjX8',
+    //   apiSecretKey: 'ABrRtbeSNqXQeGM6gQIY0uUNo5E9kKMOi1PTKh9hiWiKkLOex6',
+    //   redirectUri:
+    //       'https://flutter-flash-chat-a4db3.firebaseapp.com/__/auth/handler',
+    // ),
   ]);
 
   runApp(ProviderScope(child: FlashChat()));

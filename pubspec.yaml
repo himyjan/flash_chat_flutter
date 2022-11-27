@@ -43,7 +43,7 @@ dependencies:
   firebase_ui_oauth_apple:
   firebase_ui_oauth_facebook:
   firebase_ui_oauth_google:
-  firebase_ui_oauth_twitter:
+  # firebase_ui_oauth_twitter:
 
 dev_dependencies:
   flutter_test:
