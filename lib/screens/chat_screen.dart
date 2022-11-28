@@ -150,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MessageStream(), // 寫在下面
+            MessagesStream(), // 寫在下面
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -198,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MessageStream extends StatelessWidget {
+class MessagesStream extends StatelessWidget {
   static const mNotificationBar = const MethodChannel(
       'notification_bar.flutter.io/notificationBar'); // 訊息通知
   TextEditingController mControllera = TextEditingController();
@@ -209,44 +209,7 @@ class MessageStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection('messages').snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // 如果snapshot中有資料更新訊息
-          final messages =
-              snapshot.data!.docs.reversed; // 讀取時將訊息翻轉(主要是為了自動向下捲到新訊息)
-          List<MessageBubble> messageWidgets = [];
-          for (var message in messages) {
-            final messageText = message['text'];
-            final messageSender = message['sender'];
-            final currentTime = message['time'];
-
-            final currentUser = loggedInUser?.displayName != null
-                ? loggedInUser?.displayName
-                : loggedInUser?.email;
-
-            final messageWidget = MessageBubble(
-              sender: messageSender,
-              text: messageText,
-              time: currentTime,
-              isMe: currentUser == messageSender, // 建立訊息時，判斷是否是此登入帳號的訊息
-            );
-            showOngoingNotification(
-              flutterLocalNotificationsPlugin,
-              title: messageSender,
-              body: messageText,
-            );
-
-            messageWidgets.add(messageWidget);
-          }
-          return Expanded(
-            // 防止占滿整個畫面，留下位置給頁面其他Widget
-            child: ListView(
-              // 可捲動畫面
-              reverse: true, // 將原本翻轉過的訊息再次翻轉回來(主要是為了自動向下捲到新訊息)
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              children: messageWidgets,
-            ),
-          );
-        } else if (!snapshot.hasData) {
+        if (!snapshot.hasData) {
           // 如果snapshot中沒有資料更新訊息
           return Center(
             child: CircularProgressIndicator(
@@ -254,7 +217,42 @@ class MessageStream extends StatelessWidget {
             ),
           );
         }
-        return SizedBox.shrink();
+        // 如果snapshot中有資料更新訊息
+        final messages =
+            snapshot.data?.docs.reversed; // 讀取時將訊息翻轉(主要是為了自動向下捲到新訊息)
+        List<MessageBubble> messageBubbles = [];
+        for (var message in messages!) {
+          final messageText = message['text'];
+          final messageSender = message['sender'];
+          final currentTime = message['time'];
+
+          final currentUser = loggedInUser?.displayName != null
+              ? loggedInUser?.displayName
+              : loggedInUser?.email;
+
+          final messageBubble = MessageBubble(
+            sender: messageSender,
+            text: messageText,
+            time: currentTime,
+            isMe: currentUser == messageSender, // 建立訊息時，判斷是否是此登入帳號的訊息
+          );
+          showOngoingNotification(
+            flutterLocalNotificationsPlugin,
+            title: messageSender,
+            body: messageText,
+          );
+
+          messageBubbles.add(messageBubble);
+        }
+        return Expanded(
+          // 防止占滿整個畫面，留下位置給頁面其他Widget
+          child: ListView(
+            // 可捲動畫面
+            reverse: true, // 將原本翻轉過的訊息再次翻轉回來(主要是為了自動向下捲到新訊息)
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            children: messageBubbles,
+          ),
+        );
       },
     );
   }

@@ -147,13 +147,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       assert(user!.providerData.isEmpty);
     } else if (Platform.isAndroid) {
       // Anonymous auth does show up as a provider on Android
-      // print(user);
+      print(user);
       // assert(user?.providerData.length == 1);
       // assert(user?.providerId == 'firebase');
       assert(user?.uid != null);
-      assert(user?.displayName == null);
+      // assert(user?.displayName == null);
       assert(user?.photoURL == null);
-      assert(user?.email == null);
+      // assert(user?.email == null);
     }
 
     final User currentUser = await _firebaseAuth.currentUser!;
