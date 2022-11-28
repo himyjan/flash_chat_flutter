@@ -44,16 +44,17 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  // Future upLoadImage(File _image, String? email) async {
-  //   String? fileName = p.extension(_image.path),
-  //   Reference firebaseStorageRef = FirebaseStorage().ref().child(fileName);
-  //   UploadTask uploadTask = firebaseStorageRef.putFile(_image);
-  //   StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-  //   setState(() {
-  //     print('Profile Picture uploaded');
-  //     Scaffold.of(context).showSnackBar(SnackBar(content: Text('圖片已上傳'),));
-  //   });
-  // }
+  Future<UploadTask?> upLoadImage(File _image, String? email) async {
+    String? fileName = p.extension(_image.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+    UploadTask uploadTask = firebaseStorageRef.putFile(_image);
+    setState(() {
+      print('Profile Picture uploaded');
+      // Scaffold.of(context).showSnackBar(SnackBar(content: Text('圖片已上傳'),));
+    });
+    return Future.value(uploadTask);
+  }
 
   Future<String?> getProfilePictureUrl(String? email) async {
     // 用使用者信箱當作索引值去找到對應的文件
@@ -112,12 +113,12 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // void getMessages() async {
-  //   final messages = await _firestore.collection('messages').getDocuments();
-  //   for (var message in messages.documents) {
-  //     print(message.data);
-  //   }
-  // }
+  void getMessages() async {
+    final messages = await _firestore.collection('messages').get();
+    for (var message in messages.docs) {
+      print(message.data);
+    }
+  }
 
   void messagesStream() async {
     // 這個方法會在資料庫增加新資料時自動取得最新資料
